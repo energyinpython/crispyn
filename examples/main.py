@@ -204,7 +204,7 @@ def main():
 
     print(rank)
 
-    '''
+    
     # Part 2 - study with several weighting methods
     # Create a list with weighting methods that you want to explore
     weighting_methods_set = [
@@ -273,7 +273,7 @@ def main():
 
     # Plot heatmap with rankings correlation
     draw_heatmap(df_new_heatmap_rw, r'$r_w$')
-    '''
+    
 
     
     # SMAA method
