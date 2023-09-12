@@ -98,6 +98,7 @@ def draw_heatmap(data, title):
     plt.savefig('results/heatmap_weights.eps')
     plt.show()
 
+
 def draw_heatmap_smaa(data, title):
     """
     Display heatmap with correlations of compared rankings generated using different methods
@@ -148,7 +149,7 @@ def plot_boxplot(data):
     ax.grid(True, linestyle = '--')
     ax.set_axisbelow(True)
     ax.set_xlabel('Criterion', fontsize = 12)
-    ax.set_ylabel('Different weights distribution', fontsize = 12)
+    ax.set_ylabel('Criteria weights distribution', fontsize = 12)
     plt.tight_layout()
     plt.savefig('results/boxplot_weights.pdf')
     plt.savefig('results/boxplot_weights.eps')
@@ -167,9 +168,9 @@ class Create_dictionary(dict):
         self[key] = value
 
 
-
 # main
 def main():
+    
     # Load data from CSV
     filename = 'dataset_cars.csv'
     data = pd.read_csv(filename, index_col = 'Ai')
@@ -309,7 +310,8 @@ def main():
 
     rank_scores_df = pd.DataFrame(rank_scores, index = list_alt_names, columns = ['Rank'])
     rank_scores_df.to_csv('results_smaa/fr.csv')
-    
+
+   
 
 
 if __name__ == '__main__':

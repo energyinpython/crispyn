@@ -3,11 +3,11 @@
 # -- Project information
 
 project = 'crispyn'
-copyright = '2022, energyinpython'
+copyright = '2023, energyinpython'
 author = 'Aleksandra Bączkiewicz'
 
 release = '0.1'
-version = '0.0.1'
+version = '0.0.5'
 
 # -- General configuration
 

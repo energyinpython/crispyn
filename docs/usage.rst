@@ -216,8 +216,8 @@ Output
 	
 	
 	
-Methods for criteria weights determination
-___________________________________________
+Objective methods for criteria weights determination
+____________________________________________________________
 
 Entropy weighting method
 		
@@ -499,9 +499,114 @@ Output
 	Coefficient of variation weights:  [0.4258 0.361  0.2121 0.0011]
 	
 	
-Stochastic Multicriteria Acceptability Analysis Method - SMAA (VIKOR_SMAA)
+Subjective methods for criteria weights determination
 _______________________________________________________________________________
 
+
+AHP weighting method
+		
+.. code-block:: python
+
+	import numpy as np
+	from crispyn import weighting_methods as mcda_weights
+
+	PCcriteria = np.array([[1, 1, 5, 3], [1, 1, 5, 3], 
+    [1/5, 1/5, 1, 1/3], [1/3, 1/3, 3, 1]])
+
+	ahp_weighting = mcda_weights.AHP_WEIGHTING()
+	weights = ahp_weighting(X = PCcriteria, compute_priority_vector_method=ahp_weighting._eigenvector)
+
+	print('AHP weights: ', np.round(weights, 4))
+	
+Output
+
+.. code-block:: console
+	Inconsistency index:  0.01610868948440318
+	AHP weights:  [0.3899 0.3899 0.0679 0.1524]
+	
+	
+SWARA weighting method
+		
+.. code-block:: python
+
+	import numpy as np
+	from crispyn import weighting_methods as mcda_weights
+
+	criteria_indexes = np.array([0, 1, 2, 3, 4, 5, 6])
+    s = np.array([0, 0.35, 0.2, 0.3, 0, 0.4])
+
+	weights = mcda_weights.swara_weighting(criteria_indexes, s)
+
+	print('SWARA weights: ', np.round(weights, 4))
+	
+Output
+
+.. code-block:: console
+
+	SWARA weights:  [0.2152 0.2152 0.1594 0.1328 0.1022 0.1022 0.073 ]
+	
+	
+LBWA weighting method
+		
+.. code-block:: python
+
+	import numpy as np
+	from crispyn import weighting_methods as mcda_weights
+
+	criteria_indexes = [
+		[1, 4, 6, 5, 0, 2],
+		[7, 3]
+	]
+	
+	criteria_values_I = [
+		[0, 2, 3, 4, 4, 5],
+		[1, 2]
+	]
+
+	weights = mcda_weights.lbwa_weighting(criteria_indexes, criteria_values_I)
+
+	print('LBWA weights: ', np.round(weights, 4))
+	
+Output
+
+.. code-block:: console
+
+	LBWA weights:  [0.1215 0.1909 0.1114 0.0835 0.1485 0.1215 0.1336 0.0891]
+	
+	
+SAPEVO weighting method
+		
+.. code-block:: python
+
+	import numpy as np
+	from crispyn import weighting_methods as mcda_weights
+
+	criteria_matrix = np.array([
+		[0, 0, 3, 3, 1, 3, 2, 1, 2],
+		[0, 0, 3, 3, 1, 3, 2, 1, 2],
+		[-3, -3, 0, 0, -1, -2, -2, -1, -2],
+		[-3, -3, 0, 0, -2, 2, -2, -2, -2],
+		[-1, -1, 1, 2, 0, 2, 0, -1, 1],
+		[-3, -3, 2, -2, -2, 0, -2, -1, -2],
+		[-3, -2, 2, 2, 0, 2, 0, 3, 0],
+		[-1, -1, 1, 2, 1, 1, -3, 0, -1],
+		[-2, -2, 2, 2, -1, 2, 0, 1, 0],
+	])
+
+	weights = mcda_weights.sapevo_weighting(criteria_matrix)
+
+	print('SAPEVO weights: ', np.round(weights, 4))
+	
+Output
+
+.. code-block:: console
+
+	SAPEVO weights:  [0.232 0.232 0.    0.016 0.136 0.008 0.144 0.104 0.128]
+	
+	
+	
+Stochastic Multicriteria Acceptability Analysis Method - SMAA (VIKOR_SMAA)
+_______________________________________________________________________________
 
 
 .. code-block:: python

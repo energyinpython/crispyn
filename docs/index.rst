@@ -20,6 +20,13 @@ This library includes:
 	- ``angle_weighting`` (Angle weighting method)
 	- ``coeff_var_weighting`` (Coefficient of variation weighting method)
 	
+- Subjective weighting methods for determining criteria weights required by Multi-Criteria Decision Analysis (MCDA) methods:
+
+	- ``AHP_WEIGHTING`` (AHP weighting method)
+	- `` swara_weighting`` (SWARA weighting method)
+	- ``lbwa_weighting`` (LBWA weighting method)
+	- ``sapevo_weighting`` (SAPEVO weighting method)
+	
 - Stochastic Multicriteria Acceptability Analysis Method - SMAA combined with VIKOR (``VIKOR_SMAA``)
 	
 - Correlation coefficients:

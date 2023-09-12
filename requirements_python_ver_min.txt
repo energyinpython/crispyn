@@ -1,20 +1,18 @@
 Detecting python files..
-Analyzing 15 files using 8 processes..
-~2, ~3       C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\docs\conf.py
-2.2, 3.0     C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\examples\main.py
-!2, 3.0      C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\setup.py
-~2, ~3       C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\src\crispyn\__init__.py
-2.4, 3.0     C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\src\crispyn\additions.py
-2.3, 3.0     C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\src\crispyn\correlations.py
-~2, ~3       C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\src\crispyn\mcda_methods\__init__.py
-!2, 3.4      C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\src\crispyn\mcda_methods\mcda_method.py
-2.4, 3.0     C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\src\crispyn\mcda_methods\vikor.py
-2.4, 3.0     C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\src\crispyn\mcda_methods\vikor_smaa.py
-~2, ~3       C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\src\crispyn\normalizations.py
-2.6, 3.0     C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\src\crispyn\weighting_methods.py
-2.1, 3.0     C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\tests\test_correlations.py
-2.1, 3.0     C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\tests\test_mcda_methods.py
-2.1, 3.0     C:\Informatyka\MCDA_2022_for_articles\pypi_packages\crispyn\crispyn\tests\test_weighting_methods.py
-Tip: Since '# novm' or '# novermin' weren't used, a speedup can be achieved using: --no-parse-comments
+Analyzing 9 files using 8 processes..
+~2, ~3       D:\HUAWEI\CRISPYN 2023\crispyn\src\crispyn\__init__.py
+2.4, 3.0     D:\HUAWEI\CRISPYN 2023\crispyn\src\crispyn\additions.py
+2.3, 3.0     D:\HUAWEI\CRISPYN 2023\crispyn\src\crispyn\correlations.py
+~2, ~3       D:\HUAWEI\CRISPYN 2023\crispyn\src\crispyn\mcda_methods\__init__.py
+!2, 3.4      D:\HUAWEI\CRISPYN 2023\crispyn\src\crispyn\mcda_methods\mcda_method.py
+2.4, 3.0     D:\HUAWEI\CRISPYN 2023\crispyn\src\crispyn\mcda_methods\vikor.py
+2.4, 3.0     D:\HUAWEI\CRISPYN 2023\crispyn\src\crispyn\mcda_methods\vikor_smaa.py
+~2, ~3       D:\HUAWEI\CRISPYN 2023\crispyn\src\crispyn\normalizations.py
+2.6, 3.0     D:\HUAWEI\CRISPYN 2023\crispyn\src\crispyn\weighting_methods.py
+
+Tips:
+- Since '# novm' or '# novermin' weren't used, a speedup can be achieved using: --no-parse-comments
+(disable using: --no-tips)
+
 Minimum required versions: 3.4
 Incompatible versions:     2

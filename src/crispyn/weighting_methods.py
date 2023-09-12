@@ -1,6 +1,7 @@
 import copy
-import sys
 import itertools
+from scipy import linalg
+from scipy.sparse.linalg import eigs
 
 import numpy as np
 from .correlations import pearson_coeff
@@ -277,6 +278,7 @@ def cilos_weighting(matrix, types):
     Examples
     >>> weights = cilos_weighting(matrix, types)
     """
+
     xr = copy.deepcopy(matrix)
     # Convert negative criteria to positive criteria
     xr[:, types == -1] = np.min(matrix[:, types == -1], axis = 0) / matrix[:, types == -1]
@@ -293,16 +295,15 @@ def cilos_weighting(matrix, types):
 
     # Determine the weight system matrix
     F = np.diag(-np.sum(pij - np.diag(np.diag(pij)), axis = 0)) + pij
+    
     # Calculate the criterion impact loss weight
     # The criteria weights q are determined from the formulated homogeneous linear system of equations
-    # AA is the vector near 0
-    AA = np.zeros(F.shape[0])
-    # To determine the value of A we assume that the first element of A is close to 0 while others are zeros
-    AA[0] = sys.float_info.epsilon
     # Solve the system equation
-    q = np.linalg.inv(F).dot(AA)
+    q = linalg.null_space(F)
+    
     # Calculate and return the final weights of the criteria
-    return q / np.sum(q)
+    weights = q / np.sum(q)
+    return np.ravel(weights)
 
 
 # IDOCRIW weighting
@@ -401,3 +402,350 @@ def coeff_var_weighting(matrix):
     # Calculate the weights for each criterion
     w = ej / np.sum(ej)
     return w
+
+# AHP weighting
+class AHP_WEIGHTING():
+
+    def __init__(self):
+        """Create object of the AHP weighting method"""
+        
+        pass
+
+    def __call__(self, X, compute_priority_vector_method = None):
+
+        if compute_priority_vector_method is None:
+            compute_priority_vector_method = self._eigenvector
+
+        return AHP_WEIGHTING._ahp_weighting(self, X, compute_priority_vector_method)
+
+
+    def _check_consistency(self, X):
+        """
+        Consistency Check on the Pairwise Comparison Matrix of the Criteria or alternatives
+
+        Parameters
+        -----------
+            X : ndarray
+                matrix of pairwise comparisons
+
+        Examples
+        ----------
+        >>> PCcriteria = np.array([[1, 1, 5, 3], [1, 1, 5, 3], [1/5, 1/5, 1, 1/3], [1/3, 1/3, 3, 1]])
+        >>> ahp_weighting = AHP_WEIGHTING()
+        >>> ahp_weighting._check_consistency(PCcriteria)
+        """
+
+        n = X.shape[1]
+        RI = [0, 0, 0.58, 0.90, 1.12, 1.24, 1.32, 1.41, 1.45, 1.49]
+        lambdamax = np.amax(np.linalg.eigvals(X).real)
+        CI = (lambdamax - n) / (n - 1)
+        CR = CI / RI[n - 1]
+        print("Inconsistency index: ", CR)
+        if CR > 0.1:
+            print("The pairwise comparison matrix is inconsistent")
+
+
+    def _eigenvector(self, X):
+        """
+        Compute the Priority Vector of Criteria (weights) or alternatives using Eigenvector method
+
+        Parameters
+        -----------
+            X : ndarray
+                matrix of pairwise comparisons
+
+        Returns
+        ---------
+            ndarray
+                Eigenvector
+
+        Examples
+        ----------
+        >>> PCM1 = np.array([[1, 5, 1, 1, 1/3, 3],
+        [1/5, 1, 1/3, 1/5, 1/7, 1],
+        [1, 3, 1, 1/3, 1/5, 1],
+        [1, 5, 3, 1, 1/3, 3],
+        [3, 7, 5, 3, 1, 7],
+        [1/3, 1, 1, 1/3, 1/7, 1]])
+        >>> ahp = AHP()
+        >>> S = ahp._eigenvector(PCM1)
+        """
+
+        val, vec = eigs(X, k=1)
+        eig_vec = np.real(vec)
+        S = eig_vec / np.sum(eig_vec)
+        S = S.ravel()
+        return S
+
+
+    def _normalized_column_sum(self, X):
+        """
+        Compute the Priority Vector of Criteria (weights) or alternatives using The normalized column sum method
+
+        Parameters
+        -----------
+            X : ndarray
+                matrix of pairwise comparisons
+
+        Returns
+        ---------
+            ndarray
+                Vector with weights calculated with The normalized column sum method
+
+        Examples
+        ----------
+        >>> PCM1 = np.array([[1, 5, 1, 1, 1/3, 3],
+        [1/5, 1, 1/3, 1/5, 1/7, 1],
+        [1, 3, 1, 1/3, 1/5, 1],
+        [1, 5, 3, 1, 1/3, 3],
+        [3, 7, 5, 3, 1, 7],
+        [1/3, 1, 1, 1/3, 1/7, 1]])
+        >>> ahp = AHP()
+        >>> S = ahp._normalized_column_sum(PCM1)
+        """
+
+        return np.sum(X, axis = 1) / np.sum(X)
+
+
+    def _geometric_mean(self, X):
+        """
+        Compute the Priority Vector of Criteria (weights) or alternatives using The geometric mean method
+
+        Parameters
+        -----------
+            X : ndarray
+                matrix of pairwise comparisons
+
+        Returns
+        ---------
+            ndarray
+                Vector with weights calculated with The geometric mean method
+
+        Examples
+        ----------
+        >>> PCM1 = np.array([[1, 5, 1, 1, 1/3, 3],
+        [1/5, 1, 1/3, 1/5, 1/7, 1],
+        [1, 3, 1, 1/3, 1/5, 1],
+        [1, 5, 3, 1, 1/3, 3],
+        [3, 7, 5, 3, 1, 7],
+        [1/3, 1, 1, 1/3, 1/7, 1]])
+        >>> ahp = AHP()
+        >>> S = ahp._geometric_mean(PCM1)
+        """
+
+        n = X.shape[1]
+        numerator = (np.prod(X, axis = 1))**(1 / n)
+        denominator = np.sum(numerator)
+        return numerator / denominator
+    
+    @staticmethod
+    def _ahp_weighting(self, X, compute_priority_vector_method):
+        """
+        Calculate criteria weights using subjective AHP weighting method based on
+        provided pairwise criteria comparison matrix
+
+        Parameters
+        ------------
+            X : ndarray
+                pairwise criteria comparison matrix
+
+            compute_priority_vector_method : function
+                selected function for calculation priority vector
+                eigenvector, _normalized_column_sum, _geometric_mean
+
+        Returns
+        -------------
+            ndarray
+                Vector of criteria weights.
+
+        Examples
+        -------------
+        >>> PCcriteria = np.array([[1, 1, 5, 3], [1, 1, 5, 3], 
+            [1/5, 1/5, 1, 1/3], [1/3, 1/3, 3, 1]])
+        >>> ahp_weighting = AHP_WEIGHTING()
+        >>> weights = ahp_weighting(X = PCcriteria, compute_priority_vector_method=ahp_weighting._normalized_column_sum)
+        """
+    
+        self._check_consistency(X)
+        weights = compute_priority_vector_method(X)
+        return weights
+
+
+# SWARA weighting
+def swara_weighting(criteria_indexes, s):
+    """
+    Calculation of criteria weights using SWARA subjective weighting method
+
+    Parameters
+    -------------
+        criteria_indexes : ndarray
+            Vector with indexes of n criteria in accordance with given decision problem from C1 to Cn ordered
+            in descending order beginning from the most important criterion
+            (Vector with sorted evaluation criteria in descending order, based on their expected significances)
+
+        s : ndarray
+            The s vector containing n-1 values of criteria comparison generated in following way: 
+            Make the respondent express how much criterion j-1 is more significant than 
+            criterion j in percentage in range [0, 1]
+
+    Results
+    ------------
+        ndarray
+            Vector with criteria weights
+
+    Examples
+    -----------
+    >>> criteria_indexes = np.array([0, 1, 2, 3, 4, 5, 6])
+    >>> s = np.array([0, 0.35, 0.2, 0.3, 0, 0.4])
+    >>> swara_weights = swara_weighting(criteria_indexes, s)
+    """
+
+    # Calculation of SWARA weights for ordered criteria
+    # First criterion is considered as most important
+
+    # Adding 0 at first index
+    s = np.insert(s, 0, 0)
+
+    # Determination of the k coefficient
+    k = np.ones(len(s))
+
+    # Determination of the recalculated weight q
+    q = np.ones(len(s))
+    for j in range(1, len(s)):
+        k[j] = s[j] + 1
+        q[j] = q[j - 1] / k[j]
+
+    # Determination of the relative weights of the evaluation criteria
+    weights = q / np.sum(q)
+    # Assigning criteria weights according to their original order of criteria in given decision problem
+    indexes = np.argsort(criteria_indexes)
+    weights = weights[indexes]
+    return weights
+
+
+# LBWA weighting
+def lbwa_weighting(criteria_indexes, criteria_values_I):
+    """
+    Calculation of criteria weights using subjective LBWA weighting method.
+
+    Parameters
+    -------------
+        criteria_indexes : list including sublists
+            A list including sublists containing grouped and ordered indexes of criteria in a given decision problem from C1 to Cn according to their significance, beginning from the most significant
+
+        criteria_values_I : list including sublists
+            A list including sublists containing influence values of criteria within each subset provided in order beginning from the most significant
+
+    Returns
+    --------------
+        ndarray
+            Vector of criteria weights
+
+    Examples
+    --------------
+    >>> criteria_indexes = [
+            [1, 4, 6, 5, 0, 2],
+            [7, 3]
+        ]
+    >>>  criteria_values_I = [
+            [0, 2, 3, 4, 4, 5],
+            [1, 2]
+        ]
+    >>> weights = lbwa_weighting(criteria_indexes, criteria_values_I)
+
+    >>> criteria_indexes = [
+            [4, 7, 8, 0],
+            [2, 3],
+            [],
+            [5],
+            [],
+            [],
+            [1, 6]
+        ]
+
+    >>> criteria_values_I = [
+            [0, 1, 2, 4],
+            [1, 2],
+            [],
+            [2],
+            [],
+            [],
+            [1, 3]
+        ]
+
+    >>> weights = lbwa_weighting(criteria_indexes, criteria_values_I)
+    """
+    # Determination of r coefficient
+    r = 0
+    for el in criteria_values_I:
+        if len(el) > r:
+            r = len(el)
+
+    # Determination of r0 elasticity coefficient
+    r0 = r + 1
+
+    lbwa_influence_function = copy.deepcopy(criteria_values_I)
+
+    best_weight = 0
+    lenght = 0
+
+    # Calculation of the influence function of the criteria
+    for ind1, el1 in enumerate(criteria_values_I):
+        for ind2, el2 in enumerate(el1):
+            lbwa_influence_function[ind1][ind2] = r0 / ((ind1 + 1) * r0 + el2)
+            best_weight += r0 / ((ind1 + 1) * r0 + el2)
+            lenght += 1
+
+    # Calculation of the optimum values of the weight coefficients of criteria
+    # it is calculated the weight coefficient of the most significant criterion
+    best_weight = 1 / best_weight
+
+    # Calculation of the weight coefficients of the remaining criteria
+    weights = np.zeros(lenght)
+
+    for ind1, el1 in enumerate(lbwa_influence_function):
+        for ind2, el2 in enumerate(el1):
+            weights[criteria_indexes[ind1][ind2]] = lbwa_influence_function[ind1][ind2] * best_weight
+        
+    # Criterion considered as the most important criterion has index [0][0] in list with influence values
+    weights[criteria_indexes[0][0]] = best_weight
+    return weights
+
+
+# SAPEVO weighting
+def sapevo_weighting(criteria_matrix):
+        """
+        Calculate criteria weights using SAPEVO subjective weighting method
+
+        Parameters
+        ------------
+            criteria_matrix : ndarray
+                Matrix with degrees of pairwise criteria comparison in scale from -3 to 3
+
+        Results
+        ----------
+            ndarray:
+                Vector of criteria weights
+
+        Examples
+        -----------
+        >>> criteria_matrix = np.array([
+            [0, 0, 3, 3, 1, 3, 2, 1, 2],
+            [0, 0, 3, 3, 1, 3, 2, 1, 2],
+            [-3, -3, 0, 0, -1, -2, -2, -1, -2],
+            [-3, -3, 0, 0, -2, 2, -2, -2, -2],
+            [-1, -1, 1, 2, 0, 2, 0, -1, 1],
+            [-3, -3, 2, -2, -2, 0, -2, -1, -2],
+            [-3, -2, 2, 2, 0, 2, 0, 3, 0],
+            [-1, -1, 1, 2, 1, 1, -3, 0, -1],
+            [-2, -2, 2, 2, -1, 2, 0, 1, 0],
+        ])
+
+        >>> weights = sapevo_weighting(criteria_matrix)
+        """
+        # Calculation of the sum of degrees of preference in criteria comparison matrix in column vector
+        sum_vector = np.sum(criteria_matrix, axis = 1)
+
+        # Normalization of the column vector using Minimum-Maximum normalizations
+        norm_vector = (sum_vector - np.min(sum_vector)) / (np.max(sum_vector) - np.min(sum_vector))
+        return norm_vector / np.sum(norm_vector)

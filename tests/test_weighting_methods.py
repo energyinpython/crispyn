@@ -312,7 +312,168 @@ class Test_gini(unittest.TestCase):
         
         real_result = np.array([0.0362, 0.0437, 0.0848, 0.0984, 0.0480, 0.0842, 0.1379, 0.1125, 0.0745, 0.1107, 0.1690])
         self.assertEqual(list(np.round(test_result, 4)), list(np.round(real_result, 4)))
+
+
+# Test for AHP weighting method
+class Test_AHP(unittest.TestCase):
+
+    def test_ahp1(self):
+        """Papathanasiou, J., Ploskas, N., Papathanasiou, J., & Ploskas, N. (2018). 
+        Ahp. Multiple Criteria Decision Aid: Methods, Examples and Python Implementations, 
+        109-129. Springer Optimization and Its Applications, vol 136. Springer, Cham. 
+        DOI: https://doi.org/10.1007/978-3-319-91648-4_5"""
+
+        PCcriteria = np.array([[1, 1, 5, 3], [1, 1, 5, 3], 
+        [1/5, 1/5, 1, 1/3], [1/3, 1/3, 3, 1]])
+
+        ahp_weighting = mcda_weights.AHP_WEIGHTING()
+        test_result = ahp_weighting(X = PCcriteria, compute_priority_vector_method=ahp_weighting._eigenvector)
+        real_result = np.array([0.390, 0.390, 0.068, 0.152])
+        self.assertEqual(list(np.round(test_result, 3)), list(real_result))
         
+
+    def test_ahp2(self):
+        """
+        Wątróbski, J., Ziemba, P., Jankowski, J., & Zioło, M. (2016). Green energy for a green 
+        city—A multi-perspective model approach. Sustainability, 8(8), 702.
+        DOI: https://doi.org/10.3390/su8080702
+        """
+
+        PCcriteria = np.array([
+            [1, 2, 2, 2, 6, 2, 1, 1, 1/2, 1/2],
+            [1/2, 1, 1, 1, 4, 1, 1, 1, 1/2, 1/2],
+            [1/2, 1, 1, 1, 3, 1, 1/2, 1/2, 1/3, 1/3],
+            [1/2, 1, 1, 1, 3, 1, 1/2, 1/2, 1/3, 1/3],
+            [1/6, 1/4, 1/3, 1/3, 1, 1/3, 1/5, 1/5, 1/9, 1/9],
+            [1/2, 1, 1, 1, 3, 1, 1/2, 1/2, 1/3, 1/3],
+            [1, 1, 2, 2, 5, 2, 1, 1, 1/2, 1/2],
+            [1, 1, 2, 2, 5, 2, 1, 1, 1/2, 1/2],
+            [2, 2, 3, 3, 9, 3, 2, 2, 1, 1],
+            [2, 2, 3, 3, 9, 3, 2, 2, 1, 1]
+        ])
+
+        ahp_weighting = mcda_weights.AHP_WEIGHTING()
+        test_result = ahp_weighting(X = PCcriteria, compute_priority_vector_method=ahp_weighting._eigenvector)
+        real_result = np.array([0.1165, 0.0804, 0.0614, 0.0614, 0.0205, 0.0614, 0.10648, 0.10648, 0.19266, 0.19266])
+        self.assertEqual(list(np.round(test_result, 4)), list(np.round(real_result, 4)))
+
+
+# Test for SWARA weighting method
+class Test_SWARA(unittest.TestCase):
+
+    def test_swara(self):
+        """Karabasevic, D., Stanujkic, D., Urosevic, S., & Maksimovic, M. (2015). 
+        Selection of candidates in the mining industry based on the application of the SWARA 
+        and the MULTIMOORA methods. Acta Montanistica Slovaca, 20(2). 
+        DOI: 10.3390/ams20020116"""
+
+        criteria_indexes = np.array([0, 1, 2, 3, 4, 5, 6])
+        s = np.array([0, 0.35, 0.2, 0.3, 0, 0.4])
+
+        test_result = mcda_weights.swara_weighting(criteria_indexes, s)
+        real_result = np.array([0.215, 0.215, 0.159, 0.133, 0.102, 0.102, 0.073])
+        self.assertEqual(list(np.round(test_result, 3)), list(real_result))
+        
+
+# Test for LBWA weighting method
+class Test_LBWA(unittest.TestCase):
+
+    def test_lbwa1(self):
+        """Žižović, M., & Pamucar, D. (2019). New model for determining criteria weights: 
+        Level Based Weight Assessment (LBWA) model. Decision Making: Applications in Management 
+        and Engineering, 2(2), 126-137. 
+        DOI: https://doi.org/10.31181/dmame1902102z"""
+
+        criteria_indexes = [
+            [1, 4, 6, 5, 0, 2],
+            [7, 3]
+        ]
+
+        criteria_values_I = [
+            [0, 2, 3, 4, 4, 5],
+            [1, 2]
+        ]
+
+        test_result = mcda_weights.lbwa_weighting(criteria_indexes, criteria_values_I)
+        real_result = np.array([0.121, 0.191, 0.111, 0.084, 0.148, 0.121, 0.134, 0.089])
+        self.assertEqual(list(np.round(test_result, 3)), list(real_result))
+
+
+    def test_lbwa2(self):
+        """Žižović, M., & Pamucar, D. (2019). New model for determining criteria weights: 
+        Level Based Weight Assessment (LBWA) model. Decision Making: Applications in Management 
+        and Engineering, 2(2), 126-137. 
+        DOI: https://doi.org/10.31181/dmame1902102z"""
+
+        criteria_indexes = [
+            [4, 7, 8, 0],
+            [2, 3],
+            [],
+            [5],
+            [],
+            [],
+            [1, 6]
+        ]
+
+        criteria_values_I = [
+            [0, 1, 2, 4],
+            [1, 2],
+            [],
+            [2],
+            [],
+            [],
+            [1, 3]
+        ]
+
+        test_result = mcda_weights.lbwa_weighting(criteria_indexes, criteria_values_I)
+        real_result = np.array([0.124, 0.031, 0.102, 0.093, 0.224, 0.051, 0.029, 0.186, 0.160])
+        self.assertEqual(list(np.round(test_result, 3)), list(real_result))
+
+
+# Test for SAPEVO weighting method
+class Test_SAPEVO(unittest.TestCase):
+
+    def test_sapevo1(self):
+        """Vitorino, L., Almeida SILVA, F. C., Simões GOMES, C. F., SANTOS, M. D., & Lucas, S. F. (2022). 
+        SAPEVO-WASPAS-2N-A PROPOSAL.. Economic Computation & Economic Cybernetics Studies & Research, 
+        56(4). 
+        DOI: 10.24818/18423264/56.4.22.02"""
+
+        criteria_matrix = np.array([
+            [0, 0, 3, 3, 1, 3, 2, 1, 2],
+            [0, 0, 3, 3, 1, 3, 2, 1, 2],
+            [-3, -3, 0, 0, -1, -2, -2, -1, -2],
+            [-3, -3, 0, 0, -2, 2, -2, -2, -2],
+            [-1, -1, 1, 2, 0, 2, 0, -1, 1],
+            [-3, -3, 2, -2, -2, 0, -2, -1, -2],
+            [-3, -2, 2, 2, 0, 2, 0, 3, 0],
+            [-1, -1, 1, 2, 1, 1, -3, 0, -1],
+            [-2, -2, 2, 2, -1, 2, 0, 1, 0],
+        ])
+
+        test_result = mcda_weights.sapevo_weighting(criteria_matrix)
+        real_result = np.array([1.0000, 1.0000, 0.0000, 0.0690, 0.5862, 0.0345, 0.6207, 0.4483, 0.5517])
+        real_result = real_result / np.sum(real_result)
+        self.assertEqual(list(np.round(test_result, 4)), list(np.round(real_result, 4)))
+
+
+    def test_sapevo2(self):
+        """do Nascimento MAÊDA, S. M., Basílio, M. P., Pinheiro, I., de Araújo Costa, M. Â., 
+        Moreira, L., dos Santos, M., & Gomes, C. F. S. (2021). The SAPEVO-M-NC Method. Front. 
+        Artif. Intell. Appl, 341, 89-95. 
+        doi:10.3233/FAIA210235"""
+
+        criteria_matrix = np.array([
+            [0, 1, 3, 2],
+            [-1, 0, 2, 1],
+            [-3, -2, 0, -1],
+            [-2, -1, 1, 0]
+        ])
+
+        test_result = mcda_weights.sapevo_weighting(criteria_matrix)
+        real_result = np.array([1, 0.666667, 0.003333, 0.333333])
+        real_result = real_result / np.sum(real_result)
+        self.assertEqual(list(np.round(test_result, 2)), list(np.round(real_result, 2)))
         
         
 def main():
@@ -363,6 +524,25 @@ def main():
     # Test of the Gini coefficient-based weighting method
     test_gini = Test_gini()
     test_gini.test_gini()
+
+    # Test of the AHP weighting method
+    test_ahp = Test_AHP()
+    test_ahp.test_ahp1()
+    test_ahp.test_ahp2()
+
+    # Test of the SWARA weighting method
+    test_swara = Test_SWARA()
+    test_swara.test_swara()
+
+    # Test of the LBWA weighting method
+    test_lbwa = Test_LBWA()
+    test_lbwa.test_lbwa1()
+    test_lbwa.test_lbwa2()
+
+    # Test of the SAPEVO weighting method
+    test_sapevo = Test_SAPEVO()
+    test_sapevo.test_sapevo1()
+    test_sapevo.test_sapevo2()
 
 if __name__ == '__main__':
     main()

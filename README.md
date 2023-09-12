@@ -1,7 +1,7 @@
 # crispyn
 CRIteria Significance determining in PYthoN - The Python 3 Library for determining criteria weights for MCDA methods.
 
-This library provides 11 objective criteria weighting methods and a Stochastic Multicriteria Acceptability Analysis Method (SMAA) 
+This library provides 15 criteria weighting methods: 11 objective, 4 subjective and a Stochastic Multicriteria Acceptability Analysis Method (SMAA) 
 that does not require criteria weights.
 
 ## Installation
@@ -12,12 +12,12 @@ pip install crispyn
 
 ## Usage
 
-`crispyn` is the Python 3 package that provides 11 objective weighting methods, which can be used to determine criteria weights for 
-solving multi-criteria problems with Multi-Criteria Decision Analysis (MCDA) methods. The first step is providing the decision matrix `matrix` with alternatives 
+`crispyn` is the Python 3 package that provides 15 weighting methods: 11 objective and 4 subjective, which can be used to determine criteria weights for 
+solving multi-criteria problems with Multi-Criteria Decision Analysis (MCDA) methods. The first step is providing the decision matrix `matrix` with alternatives' 
 performance values. The decision matrix is two-dimensional and contains m alternatives in rows and n criteria in columns. You also have to provide 
 criteria types `types`. Criteria types are equal to 1 for profit criteria and -1 for cost criteria. Then you have to calculate criteria weights 
-using weighting method chosen from `crispyn.weighting_methods` submodule. Depending on the method chosen, you have to provide `matrix` or `matrix` and `types` as 
-weighting method arguments. It is detailed in Usage in the documentation. Then you can evaluate alternatives from the decision matrix using the VIKOR method 
+using the weighting method chosen from `crispyn.weighting_methods` submodule. Depending on the chosen objective method, you have to provide `matrix` or `matrix` and `types` as 
+weighting method arguments. In the case of subjective weighting methods, provided parameters are different, such as ordered criteria indexes and significance values assigned by the decision-maker to criteria. It is detailed in Usage in the documentation. Then, you can evaluate alternatives from the decision matrix using the VIKOR method 
 from `weighting method.mcda_methods` module. The VIKOR method returns a vector with preference values `pref` assigned to alternatives. To rank alternatives 
 according to VIKOR preference values, you have to sort them in ascending order because, in the VIKOR method, the best alternative has the lowest 
 preference value. The alternatives are ranked using the `rank_preferences` method provided in the `crispyn.additions` submodule. Parameter `reverse = False` means that alternatives 

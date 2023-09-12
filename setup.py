@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="crispyn",
-    version="0.0.2",
+    version="0.0.5",
     author="Aleksandra Bączkiewicz",
     author_email="aleksandra.baczkiewicz@phd.usz.edu.pl",
     description="CRIteria Significance determining in PYthoN - The Python 3 Library for determining criteria weights for MCDA methods.",
@@ -20,5 +20,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.4",
-	install_requires=['numpy'],
+	install_requires=['numpy', 'scipy'],
 )
