@@ -23,7 +23,7 @@ This library includes:
 - Subjective weighting methods for determining criteria weights required by Multi-Criteria Decision Analysis (MCDA) methods:
 
 	- ``AHP_WEIGHTING`` (AHP weighting method)
-	- `` swara_weighting`` (SWARA weighting method)
+	- ``swara_weighting`` (SWARA weighting method)
 	- ``lbwa_weighting`` (LBWA weighting method)
 	- ``sapevo_weighting`` (SAPEVO weighting method)
 	
