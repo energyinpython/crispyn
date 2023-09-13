@@ -521,6 +521,7 @@ AHP weighting method
 Output
 
 .. code-block:: console
+
 	Inconsistency index:  0.01610868948440318
 	AHP weights:  [0.3899 0.3899 0.0679 0.1524]
 	

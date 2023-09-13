@@ -18,7 +18,7 @@ performance values. The decision matrix is two-dimensional and contains m altern
 criteria types `types`. Criteria types are equal to 1 for profit criteria and -1 for cost criteria. Then you have to calculate criteria weights 
 using the weighting method chosen from `crispyn.weighting_methods` submodule. Depending on the chosen objective method, you have to provide `matrix` or `matrix` and `types` as 
 weighting method arguments. In the case of subjective weighting methods, provided parameters are different, such as ordered criteria indexes and significance values assigned by the decision-maker to criteria. It is detailed in Usage in the documentation. Then, you can evaluate alternatives from the decision matrix using the VIKOR method 
-from `weighting method.mcda_methods` module. The VIKOR method returns a vector with preference values `pref` assigned to alternatives. To rank alternatives 
+from `crispyn.mcda_methods` module. The VIKOR method returns a vector with preference values `pref` assigned to alternatives. To rank alternatives 
 according to VIKOR preference values, you have to sort them in ascending order because, in the VIKOR method, the best alternative has the lowest 
 preference value. The alternatives are ranked using the `rank_preferences` method provided in the `crispyn.additions` submodule. Parameter `reverse = False` means that alternatives 
 are sorted in ascending order. Here is an example of using the Entropy weighting method `entropy_weighting` for determining criteria weights and 

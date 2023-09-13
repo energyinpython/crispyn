@@ -189,6 +189,8 @@ def plot_radar_weights(data):
     plt.legend(data.columns, bbox_to_anchor=(-0.1, 1.1, 1.2, .102), loc='lower left',
     ncol = ncol, mode="expand", borderaxespad=0., edgecolor = 'black', title = 'Weighting methods', fontsize = 12)
     plt.tight_layout()
+    plt.savefig('results_update/radar_weights.pdf')
+    plt.savefig('results_update/radar_weights.eps')
     plt.show()
 
 
@@ -336,6 +338,7 @@ def main():
     plot_boxplot(df_weights.T)
     plot_barplot_stacked(df_weights.T, stacked = True)
     plot_barplot_stacked(df_weights.T, stacked = False)
+    plot_radar_weights(df_weights)
 
     weighting_methods_names = ['AHP', 'SWARA', 'LBWA', 'SAPEVO']
     weights_list = [weights_ahp, weights_swara, weights_lbwa, weights_sapevo]
@@ -355,8 +358,6 @@ def main():
         df_ranks[weighting_methods_names[el]] = rank
 
     plot_radar(df_ranks)
-
-    plot_radar_weights(df_weights)
 
     df_prefs.to_csv('./results_update/df_prefs.csv')
     df_ranks.to_csv('./results_update/df_ranks.csv')
