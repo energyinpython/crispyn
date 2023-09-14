@@ -511,7 +511,7 @@ AHP weighting method
 	from crispyn import weighting_methods as mcda_weights
 
 	PCcriteria = np.array([[1, 1, 5, 3], [1, 1, 5, 3], 
-    [1/5, 1/5, 1, 1/3], [1/3, 1/3, 3, 1]])
+	[1/5, 1/5, 1, 1/3], [1/3, 1/3, 3, 1]])
 
 	ahp_weighting = mcda_weights.AHP_WEIGHTING()
 	weights = ahp_weighting(X = PCcriteria, compute_priority_vector_method=ahp_weighting._eigenvector)
@@ -534,7 +534,7 @@ SWARA weighting method
 	from crispyn import weighting_methods as mcda_weights
 
 	criteria_indexes = np.array([0, 1, 2, 3, 4, 5, 6])
-    s = np.array([0, 0.35, 0.2, 0.3, 0, 0.4])
+	s = np.array([0, 0.35, 0.2, 0.3, 0, 0.4])
 
 	weights = mcda_weights.swara_weighting(criteria_indexes, s)
 
