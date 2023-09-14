@@ -70,7 +70,7 @@ Output
 	Ranking:  [3 6 4 2 1 5]
 	
 	
-The VIKOR method provided in the ``objective-weighting`` library can also be used with multiple weight vectors provided in the matrix. This matrix
+The VIKOR method provided in the ``crispyn`` library can also be used with multiple weight vectors provided in the matrix. This matrix
 includes weight vectors in rows. The number of rows is equal to the vectors number, and the number of columns is equal to the criteria number. In this case,
 the VIKOR method returns a matrix with preference values. Vectors with preference values for each weight vector are contained in each column. The number
 of rows of the matrix with preference values is equal to the number of alternatives, and the number of columns is equal to the number of weight vectors.

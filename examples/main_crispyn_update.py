@@ -245,6 +245,7 @@ def main():
     types = data.iloc[len(data) - 1, :].to_numpy()
     matrix = df_data.to_numpy()
 
+
     # dataframe for weights
     cols = [r'$C_{' + str(j) + '}$' for j in range(1, matrix.shape[1] + 1)]
     df_weights = pd.DataFrame(index = cols)
