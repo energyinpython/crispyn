@@ -403,6 +403,7 @@ def coeff_var_weighting(matrix):
     w = ej / np.sum(ej)
     return w
 
+
 # AHP weighting
 class AHP_WEIGHTING():
 
@@ -588,7 +589,7 @@ def swara_weighting(criteria_indexes, s):
             Make the respondent express how much criterion j-1 is more significant than 
             criterion j in percentage in range [0, 1]
 
-    Results
+    Returns
     ------------
         ndarray
             Vector with criteria weights
@@ -714,38 +715,38 @@ def lbwa_weighting(criteria_indexes, criteria_values_I):
 
 # SAPEVO weighting
 def sapevo_weighting(criteria_matrix):
-        """
-        Calculate criteria weights using SAPEVO subjective weighting method
+    """
+    Calculate criteria weights using SAPEVO subjective weighting method
 
-        Parameters
-        ------------
-            criteria_matrix : ndarray
-                Matrix with degrees of pairwise criteria comparison in scale from -3 to 3
+    Parameters
+    ------------
+        criteria_matrix : ndarray
+            Matrix with degrees of pairwise criteria comparison in scale from -3 to 3
 
-        Results
-        ----------
-            ndarray:
-                Vector of criteria weights
+    Returns
+    ----------
+        ndarray:
+            Vector of criteria weights
 
-        Examples
-        -----------
-        >>> criteria_matrix = np.array([
-            [0, 0, 3, 3, 1, 3, 2, 1, 2],
-            [0, 0, 3, 3, 1, 3, 2, 1, 2],
-            [-3, -3, 0, 0, -1, -2, -2, -1, -2],
-            [-3, -3, 0, 0, -2, 2, -2, -2, -2],
-            [-1, -1, 1, 2, 0, 2, 0, -1, 1],
-            [-3, -3, 2, -2, -2, 0, -2, -1, -2],
-            [-3, -2, 2, 2, 0, 2, 0, 3, 0],
-            [-1, -1, 1, 2, 1, 1, -3, 0, -1],
-            [-2, -2, 2, 2, -1, 2, 0, 1, 0],
-        ])
+    Examples
+    -----------
+    >>> criteria_matrix = np.array([
+        [0, 0, 3, 3, 1, 3, 2, 1, 2],
+        [0, 0, 3, 3, 1, 3, 2, 1, 2],
+        [-3, -3, 0, 0, -1, -2, -2, -1, -2],
+        [-3, -3, 0, 0, -2, 2, -2, -2, -2],
+        [-1, -1, 1, 2, 0, 2, 0, -1, 1],
+        [-3, -3, 2, -2, -2, 0, -2, -1, -2],
+        [-3, -2, 2, 2, 0, 2, 0, 3, 0],
+        [-1, -1, 1, 2, 1, 1, -3, 0, -1],
+        [-2, -2, 2, 2, -1, 2, 0, 1, 0],
+    ])
 
-        >>> weights = sapevo_weighting(criteria_matrix)
-        """
-        # Calculation of the sum of degrees of preference in criteria comparison matrix in column vector
-        sum_vector = np.sum(criteria_matrix, axis = 1)
+    >>> weights = sapevo_weighting(criteria_matrix)
+    """
+    # Calculation of the sum of degrees of preference in criteria comparison matrix in column vector
+    sum_vector = np.sum(criteria_matrix, axis = 1)
 
-        # Normalization of the column vector using Minimum-Maximum normalizations
-        norm_vector = (sum_vector - np.min(sum_vector)) / (np.max(sum_vector) - np.min(sum_vector))
-        return norm_vector / np.sum(norm_vector)
+    # Normalization of the column vector using Minimum-Maximum normalizations
+    norm_vector = (sum_vector - np.min(sum_vector)) / (np.max(sum_vector) - np.min(sum_vector))
+    return norm_vector / np.sum(norm_vector)

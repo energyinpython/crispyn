@@ -7,21 +7,15 @@ copyright = '2023, energyinpython'
 author = 'Aleksandra Bączkiewicz'
 
 release = '0.1'
-version = '0.0.5'
+version = '0.0.6'
 
 # -- General configuration
 
-extensions = [
-    'sphinx.ext.duration',
-    'sphinx.ext.doctest',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx',
-	'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode',
-	'nbsphinx',
-	'autoapi.extension',
+extensions = ['autoapi.extension',
+'nbsphinx',
+'sphinx_rtd_theme',
 ]
+
 autoapi_type = 'python'
 autoapi_dirs = ["../src"]  # location to parse for API reference
 

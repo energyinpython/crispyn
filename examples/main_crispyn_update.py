@@ -40,6 +40,52 @@ def plot_boxplot(data):
 
 
 # bar (column) chart
+def plot_barplot(df_plot, stacked = False):
+    """
+    Visualization method to display column chart of alternatives rankings obtained with 
+    different methods.
+
+    Parameters
+    ----------
+        df_plot : DataFrame
+            DataFrame containing rankings of alternatives obtained with different methods.
+            The particular rankings are included in subsequent columns of DataFrame.
+
+        stacked : Boolean
+            Variable denoting if the chart is to be stacked or not.
+
+    Examples
+    ----------
+    >>> plot_barplot(df_plot)
+    """
+
+    ax = df_plot.plot(kind='bar', width = 0.6, stacked=stacked, edgecolor = 'black', figsize = (9,4))
+    if stacked == False:
+        step = 1
+        list_rank = np.arange(1, len(df_plot) + 1, step)
+        ax.set_yticks(list_rank)
+        ax.set_ylim(0, len(df_plot) + 1)
+
+    ax.set_xticklabels(df_plot.index, rotation = 'horizontal')
+    ax.tick_params(axis = 'both', labelsize = 12)
+    y_ticks = ax.yaxis.get_major_ticks()
+    
+    ncol = df_plot.shape[1]
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left', title = 'Weighting methods',
+    ncol = ncol, mode="expand", borderaxespad=0., edgecolor = 'black', fontsize = 12)
+
+    ax.set_xlabel('Alternatives', fontsize = 12)
+    ax.set_ylabel('Rank', fontsize = 12)
+
+    ax.grid(True, linestyle = '--')
+    ax.set_axisbelow(True)
+    plt.tight_layout()
+    plt.savefig('results_update/barplot_rankings.pdf')
+    plt.savefig('results_update/barplot_rankings.eps')
+    plt.show()
+
+
+# bar (column) chart
 def plot_barplot_stacked(df_plot, stacked = False):
     """
     Visualization method to display column chart of alternatives rankings obtained with 
@@ -76,7 +122,7 @@ def plot_barplot_stacked(df_plot, stacked = False):
     ax.set_xlabel('Weighting methods', fontsize = 12)
     ax.set_ylabel('Weight value', fontsize = 12)
 
-    ax.grid(True)
+    ax.grid(True, linestyle = '--')
     ax.set_axisbelow(True)
     plt.tight_layout()
     plt.savefig('results_update/boxplot_weights_col.pdf')
@@ -122,7 +168,7 @@ def plot_radar(data):
     
     ax.set_thetagrids(angles * 180/np.pi, labels)
     ax.set_rgrids(np.arange(1, data.shape[0] + 1, 1))
-    ax.grid(True)
+    ax.grid(True, linestyle = '--')
     ax.set_axisbelow(True)
     # plt.legend(data.columns, bbox_to_anchor=(1.0, 0.95, 0.4, 0.2), loc='upper left')
     if data.shape[1] % 2 == 0:
@@ -177,10 +223,12 @@ def plot_radar_weights(data):
         ax.plot(angles, stats, linewidth=2)
         # ax.fill(angles, stats, label='_nolegend_', alpha=0.5)
     
-    ax.set_thetagrids(angles * 180/np.pi, labels)
-    ax.set_rgrids(np.round(np.linspace(0, np.max(stats) + 0.05, 5), 2))
-    ax.grid(True)
     ax.set_axisbelow(True)
+    ax.grid(True, linestyle='--')
+    ax.set_rgrids(np.round(np.linspace(0, np.max(stats) + 0.05, 5), 2))
+    ax.set_thetagrids(angles * 180/np.pi, labels)
+    
+    
     # plt.legend(data.columns, bbox_to_anchor=(1.0, 0.95, 0.4, 0.2), loc='upper left')
     if data.shape[1] % 2 == 0:
         ncol = data.shape[1] // 2
@@ -359,6 +407,7 @@ def main():
         df_ranks[weighting_methods_names[el]] = rank
 
     plot_radar(df_ranks)
+    plot_barplot(df_ranks)
 
     df_prefs.to_csv('./results_update/df_prefs.csv')
     df_ranks.to_csv('./results_update/df_ranks.csv')
